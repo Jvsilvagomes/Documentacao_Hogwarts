@@ -46,30 +46,23 @@ const createBruxo = (req, res) => {
       success: false,
       message: "Nome e casa são obrigatórios",
       error: "OBRIGATORY_ELEMENTS",
-      suggestions: [
-        "Check the wizard nome",
-        "Check the wizard casa",
-      ],
+      suggestions: ["Check the wizard nome", "Check the wizard casa"],
     });
   }
 
-
-
-const nomeExiste = bruxos.some(
+  const nomeExiste = bruxos.some(
     (b) => b.nome.toLowerCase() === nome.toLowerCase()
   );
 
   if (nomeExiste) {
-    return res.status(409).json({ 
-    status: 409,
-    success: false,
-    message: "Já existe um bruxo com esse nome!",
-    error: "NAME_ALREADY_USED",
-    suggestions: [
-        "Check the wizard nome",
-      ]
-  });
-}
+    return res.status(409).json({
+      status: 409,
+      success: false,
+      message: "Já existe um bruxo com esse nome!",
+      error: "NAME_ALREADY_USED",
+      suggestions: ["Check the wizard nome"],
+    });
+  }
 
   const novoBruxo = {
     id: bruxos.length + 1,
@@ -91,7 +84,6 @@ const nomeExiste = bruxos.some(
     total: novoBruxo.length,
   });
 };
-
 
 const deleteBruxo = (req, res) => {
   const id = parseInt(req.params.id);
@@ -134,4 +126,57 @@ const deleteBruxo = (req, res) => {
   });
 };
 
-export { getAllBruxos, getBruxosById, createBruxo, deleteBruxo };
+const updateBruxo = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { nome, casa, anoNascimento, especialidade, nivelMagia, ativo } =
+    req.body;
+
+  const idParaEditar = id;
+
+  if (isNaN(idParaEditar)) {
+    return res.status(400).json({
+      status: 400,
+      success: false,
+      message: "ID inválido. O ID deve ser um número.",
+      error: "INVALID_ID",
+      details: "O ID fornecido não é um número válido.",
+    });
+  }
+
+  const bruxoExiste = bruxos.find((b) => b.id === idParaEditar);
+  if (!bruxoExiste) {
+    return res.status(404).json({
+      status: 404,
+      success: false,
+      message: "Bruxo não REGISTRADO!",
+      error: "BRUXO_NOT_FOUND",
+      suggestions: [
+        "Verifique a grafia do nome do bruxo",
+        "Verifique se o bruxo está registrado",
+      ],
+    });
+  }
+
+  const bruxosAtualizados = bruxos.map((bruxo) => bruxo.id === idParaEditar ? {
+          ...bruxo,
+          ...(  nome && { nome } ),
+          ...( casa && { casa } ),
+          ...(anoNascimento && { anoNascimento: parseInt(anoNascimento) } ),
+          ...(especialidade && { especialidade }),
+          ...(nivelMagia && { nivelMagia }),
+          ...(ativo && { ativo }),
+        }
+      : bruxo
+  );
+
+  bruxos.splice(0, bruxos.length, ...bruxosAtualizados);
+
+  res.status(200).json({
+    status: 200,
+    success: true,
+    message: `Bruxo ${idParaEditar} atualizado com sucesso!!`,
+    bruxo: bruxosAtualizados.find((b) => b.id === idParaEditar),
+  });
+};
+
+export { getAllBruxos, getBruxosById, createBruxo, deleteBruxo, updateBruxo  };
