@@ -37,34 +37,39 @@ const getBruxosById = (req, res) => {
 };
 
 const createBruxo = (req, res) => {
-  const { nome, casa, anoNascimento, especialidade, nivelmagia, ativo } =
+  const { nome, casa, anoNascimento, especialidade, nivelMagia, ativo } =
     req.body;
 
   if (!nome || !casa) {
-    res.status(400).json({
+    return res.status(400).json({
       status: 400,
       success: false,
-      message: "Nome e casa são obrigatório para um bruxo!",
-      error: "VALIDATION_ERROR",
-      details: {
-        nome: "Invalid name selection",
-        house: "Invalid house selection",
-      },
+      message: "Nome e casa são obrigatórios",
+      error: "OBRIGATORY_ELEMENTS",
+      suggestions: [
+        "Check the wizard nome",
+        "Check the wizard casa",
+      ],
     });
-
-    if (bruxos.some((b) => b.nome === nome)) {
-      return res.status(409).json({
-        status: 409,
-        success: false,
-        message: "Bruxo já registrado!",
-        error: "BRUXO_ALREADY_EXISTS",
-        suggestions: [
-          "Try registering with a different name",
-          "Check the spelling of the wizard's name",
-        ],
-      });
-    }
   }
+
+
+
+const nomeExiste = bruxos.some(
+    (b) => b.nome.toLowerCase() === nome.toLowerCase()
+  );
+
+  if (nomeExiste) {
+    return res.status(409).json({ 
+    status: 409,
+    success: false,
+    message: "Já existe um bruxo com esse nome!",
+    error: "NAME_ALREADY_USED",
+    suggestions: [
+        "Check the wizard nome",
+      ]
+  });
+}
 
   const novoBruxo = {
     id: bruxos.length + 1,
@@ -72,20 +77,21 @@ const createBruxo = (req, res) => {
     casa,
     anoNascimento: parseInt(anoNascimento),
     especialidade,
-    nivelmagia,
+    nivelMagia: nivelMagia,
     ativo,
   };
 
   bruxos.push(novoBruxo);
 
   res.status(201).json({
-    status: 200,
-    success: true,
-    message: "Bruxo criado com sucesso",
+    status: 201,
+    sucess: true,
+    message: "Bruxo cadastrado com sucesso!",
     bruxo: novoBruxo,
     total: novoBruxo.length,
   });
 };
+
 
 const deleteBruxo = (req, res) => {
   const id = parseInt(req.params.id);
