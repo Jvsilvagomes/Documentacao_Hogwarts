@@ -51,18 +51,19 @@ const createBruxo = (req, res) => {
         house: "Invalid house selection",
       },
     });
-
-  if (bruxos.some((b) => b.nome === nome)) {
-    return res.status(409).json({
-      status: 409,
-      success: false,
-      message: `Bruxo ${nome} já cadastrado no sistema!`,
-      error: "BRUXO_ALREADY_EXISTS",
-      suggestions: [
-        "Try registering with another name",
-        "Check the spelling of the wizard's name",
-      ],
-    });
+    
+    if(bruxos.some(b => b.nome === nome)) {
+      return res.status(409).json({
+        status: 409,
+        success: false,
+        message: "Bruxo já registrado!",
+        error: "BRUXO_ALREADY_EXISTS",
+        suggestions: [
+            "Try registering with a different name",
+            "Check the spelling of the wizard's name"
+        ]
+      });
+    }
 
   }
 
