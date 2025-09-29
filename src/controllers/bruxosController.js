@@ -36,4 +36,42 @@ const getBruxosById = (req, res) => {
   });
 };
 
-export { getAllBruxos, getBruxosById };
+const createBruxo = (req, res) => {
+  const { nome, casa, anoNascimento, especialidade, nivelmagia, ativo } =
+    req.body;
+
+  if (!nome || !casa) {
+    return res.status(400).json({
+      status: 400,
+      success: false,
+      message: "Nome e casa são obrigatório para um bruxo!",
+      error: "VALIDATION_ERROR",
+      details: {
+        nome: "Invalid name selection",
+        house: "Invalid house selection",
+      },
+    });
+  }
+
+  const novoBruxo = {
+    id: bruxos.length + 1,
+    nome,
+    casa,
+    anoNascimento: parseInt(anoNascimento),
+    especialidade,
+    nivelmagia,
+    ativo
+  }
+
+  bruxos.push(novoBruxo);
+
+  res.status(201).json({
+    status:200,
+    success: true,
+    message: "Bruxo criado com sucesso",
+    bruxo: novoBruxo,
+    total: novoBruxo.length
+  })
+};
+
+export { getAllBruxos, getBruxosById, createBruxo};
