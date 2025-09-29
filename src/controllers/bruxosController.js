@@ -41,7 +41,7 @@ const createBruxo = (req, res) => {
     req.body;
 
   if (!nome || !casa) {
-    return res.status(400).json({
+    res.status(400).json({
       status: 400,
       success: false,
       message: "Nome e casa são obrigatório para um bruxo!",
@@ -51,20 +51,19 @@ const createBruxo = (req, res) => {
         house: "Invalid house selection",
       },
     });
-    
-    if(bruxos.some(b => b.nome === nome)) {
+
+    if (bruxos.some((b) => b.nome === nome)) {
       return res.status(409).json({
         status: 409,
         success: false,
         message: "Bruxo já registrado!",
         error: "BRUXO_ALREADY_EXISTS",
         suggestions: [
-            "Try registering with a different name",
-            "Check the spelling of the wizard's name"
-        ]
+          "Try registering with a different name",
+          "Check the spelling of the wizard's name",
+        ],
       });
     }
-
   }
 
   const novoBruxo = {
@@ -127,7 +126,6 @@ const deleteBruxo = (req, res) => {
     bruxo: bruxosParaRemover,
     total: bruxosParaRemover.length,
   });
-
 };
 
 export { getAllBruxos, getBruxosById, createBruxo, deleteBruxo };
