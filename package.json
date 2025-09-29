@@ -1,14 +1,20 @@
 {
   "name": "documentacao_hogwarts",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cls & nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "Senai",
+    "Documentação",
+    "Backend"
+  ],
+  "author": "João Victor",
+  "license": "MIT",
+  "description": "uma Documentação de bruxos para a atividade de backend",
   "dependencies": {
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
