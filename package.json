@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cls & nodemon server.js"
+    "dev": "cls & nodemon server.js",
+    "studio": "npx prisma studio"
   },
   "keywords": [
     "Senai",
@@ -16,8 +17,10 @@
   "license": "MIT",
   "description": "uma Documentação de bruxos para a atividade de backend",
   "dependencies": {
+    "@prisma/client": "^6.17.1",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "prisma": "^6.17.1"
   }
 }
